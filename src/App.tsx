@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -29,6 +30,7 @@ function CustomBox(props: TabPanelProps) {
         <Box
           sx={{
             marginTop: 2,
+            marginBottom: 2,
             p: 2,
             border: "1px solid #dadada",
             borderRadius: 2,
@@ -49,27 +51,36 @@ export default function App() {
   };
 
   return (
-    <Container>
-      <Stack>
-        <Box sx={{ width: "100%" }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
-              <Tab label="THÔNG TIN" value={0} />
-              <Tab label="CHIẾN DỊCH CON" value={1} />
-            </Tabs>
+    <div>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Container>
+          <Stack py={1} direction="row" justifyContent={"end"}>
+            <Button variant="contained">Submit</Button>
+          </Stack>
+        </Container>
+      </Box>
+      <Container>
+        <Stack>
+          <Box sx={{ width: "100%" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+              >
+                <Tab label="THÔNG TIN" value={0} />
+                <Tab label="CHIẾN DỊCH CON" value={1} />
+              </Tabs>
+            </Box>
+            <CustomBox value={value} index={0}>
+              <InfomationForm />
+            </CustomBox>
+            <CustomBox value={value} index={1}>
+              <SubCampaingns />
+            </CustomBox>
           </Box>
-          <CustomBox value={value} index={0}>
-            <InfomationForm />
-          </CustomBox>
-          <CustomBox value={value} index={1}>
-            <SubCampaingns />
-          </CustomBox>
-        </Box>
-      </Stack>
-    </Container>
+        </Stack>
+      </Container>
+    </div>
   );
 }
