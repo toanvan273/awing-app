@@ -9,6 +9,7 @@ interface Props {
   campaigns: SubCampaign[];
   dispatch: React.Dispatch<ActionCampaign>;
   campaignSelected: SubCampaign;
+  setCampaignSelected: React.Dispatch<React.SetStateAction<SubCampaign>>;
 }
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -16,10 +17,22 @@ export default function Campaign({
   campaigns,
   dispatch,
   campaignSelected,
+  setCampaignSelected,
 }: Props) {
   const handleAddCampaign = () => {
     dispatch({ type: "add_campaign" });
   };
+
+  const handleSelectCampaign = (camp: SubCampaign) => {
+    setCampaignSelected(camp);
+  };
+
+  const handleChangeNameCampaign = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    console.log(event);
+  };
+  console.log("campaignSelected:", campaignSelected);
 
   return (
     <div>
@@ -34,17 +47,18 @@ export default function Campaign({
         </IconButton>
         <Stack marginLeft={1} direction={"row"}>
           {campaigns.map((camp, index) => {
-            // console.log("camp", camp);
-
             return (
               <Box
+                onClick={() => handleSelectCampaign(camp)}
                 key={index}
                 sx={{
                   p: 2,
                   width: 210,
                   height: 120,
-                  // border: "1px solid #0000000a",
-                  border: "2px solid blue",
+                  border:
+                    campaignSelected.idCamp === camp.idCamp
+                      ? "2px solid blue"
+                      : "2px solid #0000000a",
                   borderRadius: 2,
                   marginRight: 2,
                 }}
@@ -71,12 +85,14 @@ export default function Campaign({
       <Stack marginTop={2} direction={"row"} alignItems={"center"}>
         <Box flex={1}>
           <TextField
+              onChange={handleChangeNameCampaign}
             sx={{ width: "100%" }}
             required
             id="standard-required"
             label="Tên chiến dịch con"
             variant="standard"
-            defaultValue={campaignSelected.name}
+            // defaultValue={campaignSelected.name}
+            value={campaignSelected.name}
           />
         </Box>
         <Box>

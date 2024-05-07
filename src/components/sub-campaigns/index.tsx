@@ -38,6 +38,7 @@ const SubCampaingns = () => {
         campaigns={campaigns}
         dispatch={dispatch}
         campaignSelected={campaignSelected}
+        setCampaignSelected={setCampaignSelected}
       />
       <Stack py={1}>
         <h2>DANH SACH QUANG CAO</h2>

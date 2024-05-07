@@ -10,8 +10,6 @@ const InfomationForm = () => {
       dispatch({ type: text, payload: event.target.value });
     };
 
-  console.log("state:", state);
-
   return (
     <Box component="form" noValidate autoComplete="off">
       <div>
@@ -23,6 +21,7 @@ const InfomationForm = () => {
             id="standard-required"
             label="Tên chiến dịch"
             variant="standard"
+            value={state.name}
           />
         </div>
         <div>
@@ -32,6 +31,7 @@ const InfomationForm = () => {
             id="standard-required"
             label="Mô tả"
             variant="standard"
+            value={state.describe}
           />
         </div>
       </div>
