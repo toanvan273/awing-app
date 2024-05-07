@@ -1,26 +1,75 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import InfomationForm from "./components/information";
+import SubCampaingns from "./components/sub-campaigns";
 
-function App() {
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomBox(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box
+          sx={{
+            marginTop: 2,
+            p: 2,
+            border: "1px solid #dadada",
+            borderRadius: 2,
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Container>
+      <Stack>
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="THÔNG TIN" value={0} />
+              <Tab label="CHIẾN DỊCH CON" value={1} />
+            </Tabs>
+          </Box>
+          <CustomBox value={value} index={0}>
+            <InfomationForm />
+          </CustomBox>
+          <CustomBox value={value} index={1}>
+            <SubCampaingns />
+          </CustomBox>
+        </Box>
+      </Stack>
+    </Container>
+  );
+}
