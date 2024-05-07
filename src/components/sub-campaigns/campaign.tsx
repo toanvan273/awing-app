@@ -8,14 +8,18 @@ import { SubCampaign } from "../../types/campaign-type";
 interface Props {
   campaigns: SubCampaign[];
   dispatch: React.Dispatch<ActionCampaign>;
+  campaignSelected: SubCampaign;
 }
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-export default function Campaign({ campaigns, dispatch }: Props) {
-  const handleAddCampaign = ({}) => {
+export default function Campaign({
+  campaigns,
+  dispatch,
+  campaignSelected,
+}: Props) {
+  const handleAddCampaign = () => {
     dispatch({ type: "add_campaign" });
   };
-  console.log("Campaign:", campaigns);
 
   return (
     <div>
@@ -30,7 +34,7 @@ export default function Campaign({ campaigns, dispatch }: Props) {
         </IconButton>
         <Stack marginLeft={1} direction={"row"}>
           {campaigns.map((camp, index) => {
-            console.log("camp", camp);
+            // console.log("camp", camp);
 
             return (
               <Box
@@ -72,10 +76,15 @@ export default function Campaign({ campaigns, dispatch }: Props) {
             id="standard-required"
             label="Tên chiến dịch con"
             variant="standard"
+            defaultValue={campaignSelected.name}
           />
         </Box>
         <Box>
-          <Checkbox {...label} size="small" />
+          <Checkbox
+            {...label}
+            size="small"
+            defaultChecked={campaignSelected.status}
+          />
           <span>Dang hoat dong</span>
         </Box>
       </Stack>

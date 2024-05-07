@@ -1,12 +1,11 @@
 import { Ad, Information, SubCampaign } from "../types/campaign-type";
-// Action types
+
 type ActionInfo =
   | { type: "name"; payload: string }
   | { type: "desc"; payload: string };
 
 export type ActionCampaign = { type: "add_campaign" };
 
-// Reducer function
 export function reducerInfo(state: Information, action: ActionInfo) {
   switch (action.type) {
     case "name":
@@ -22,15 +21,15 @@ export function reducerCampaign(state: SubCampaign[], action: ActionCampaign) {
   switch (action.type) {
     case "add_campaign":
       const numberCampaign = state.length + 1;
-      // console.log("chek", state, numberCampaign);
-
       const newAd: Ad = {
         name: "Quang cao 1",
         quantity: 0,
+        idAd: Date.now(),
       };
       const newCampaign: SubCampaign = {
         name: `Chien dich con ${numberCampaign}`,
         status: true,
+        idCamp: numberCampaign,
         ads: [newAd],
       };
       return [...state, newCampaign];
