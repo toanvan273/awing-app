@@ -30,6 +30,8 @@ const SubCampaingns = () => {
   );
 
   const [campaignSelected, setCampaignSelected] = useState(campaigns[0]);
+  const [idCampSelect, setIdCampSelect] = useState(0);
+
   console.log("campaignSelected", campaignSelected);
 
   return (
@@ -39,10 +41,16 @@ const SubCampaingns = () => {
         dispatch={dispatch}
         campaignSelected={campaignSelected}
         setCampaignSelected={setCampaignSelected}
+        idCampSelect={idCampSelect}
+        setIdCampSelect={setIdCampSelect}
       />
       <Stack py={1}>
         <h2>DANH SACH QUANG CAO</h2>
-        <DataTable campaignSelected={campaignSelected} />
+        <DataTable
+          dispatch={dispatch}
+          idCampSelect={idCampSelect}
+          campaignSelected={campaigns.find((c) => c.idCamp === idCampSelect)}
+        />
       </Stack>
     </Container>
   );
