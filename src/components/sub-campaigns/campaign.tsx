@@ -4,13 +4,14 @@ import { Box, Checkbox, Stack, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { useMemo } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
-import { SubCampaign } from "../../types/campaign-type";
+import { Ad, SubCampaign } from "../../types/campaign-type";
 
 interface Props {
   campaigns: SubCampaign[];
   dispatch: React.Dispatch<ActionCampaign>;
   idCampSelect: number;
   setIdCampSelect: React.Dispatch<React.SetStateAction<number>>;
+  validate: boolean;
 }
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -19,6 +20,7 @@ export default function Campaign({
   dispatch,
   idCampSelect,
   setIdCampSelect,
+  validate,
 }: Props) {
   const selectedCamp = useMemo(() => {
     return campaigns.find((e) => e.idCamp === idCampSelect);
@@ -61,8 +63,14 @@ export default function Campaign({
       });
     }
   };
-  // console.log("idCampSelect:", idCampSelect);
-  // console.log("selectedCamp:", selectedCamp);
+
+  const totalQuantity = (ads: Ad[]) => {
+    if (ads.length > 0) {
+      return ads.reduce((ac, cur) => ac + (cur.quantity || 0), 0);
+    }
+    return 0;
+  };
+
   return (
     <div>
       <Stack direction="row" alignItems="start" overflow={"auto"}>
@@ -108,7 +116,7 @@ export default function Campaign({
                     />
                   </Stack>
                   <Stack textAlign={"center"} fontSize={24} marginTop={0}>
-                    <b>0</b>
+                    <b>{totalQuantity(camp.ads)}</b>
                   </Stack>
                 </Box>
               );
@@ -119,6 +127,7 @@ export default function Campaign({
         <Stack marginTop={2} direction={"row"} alignItems={"center"}>
           <Box flex={1}>
             <TextField
+              error={validate && selectedCamp.name === ""}
               onChange={handleChangeNameCampaign}
               sx={{ width: "100%" }}
               required
@@ -126,6 +135,11 @@ export default function Campaign({
               label="Tên chiến dịch con"
               variant="standard"
               value={selectedCamp.name}
+              helperText={
+                validate && selectedCamp.name === ""
+                  ? "Dữ liệu không hợp lệ."
+                  : ""
+              }
             />
           </Box>
           <Box>

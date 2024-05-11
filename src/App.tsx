@@ -64,6 +64,7 @@ function createInitialState(): SubCampaign[] {
 
 export default function App() {
   const [value, setValue] = useState(0);
+  const [validate, setValidate] = useState(false);
   const [stateInfo, dispatchInfo] = useReducer(reducerInfo, {
     name: "",
     describe: "",
@@ -77,7 +78,28 @@ export default function App() {
     setValue(newValue);
   };
 
-  const handleSubmit = () => {};
+  const validateCampaign = (camps: SubCampaign[]) => {
+    return camps.some(
+      (camp) =>
+        camp.name !== "" &&
+        camp.ads.some(
+          (ad) =>
+            ad.name !== "" && ad.quantity !== 0 && Number.isInteger(ad.quantity)
+        )
+    );
+  };
+
+  const handleSubmit = () => {
+    console.log({ stateInfo, stateCampaigns });
+    const validateCamp = validateCampaign(stateCampaigns);
+    if (stateInfo.name !== "" && validateCamp) {
+      window.alert(`Thêm thành công chiến dịch`);
+    } else {
+      window.alert(`Vui lòng điền đúng và đầy đủ thông tin`);
+      setValidate(true);
+    }
+  };
+
   return (
     <div>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -103,10 +125,15 @@ export default function App() {
               </Tabs>
             </Box>
             <CustomBox value={value} index={0}>
-              <InfomationForm state={stateInfo} dispatch={dispatchInfo} />
+              <InfomationForm
+                validate={validate}
+                state={stateInfo}
+                dispatch={dispatchInfo}
+              />
             </CustomBox>
             <CustomBox value={value} index={1}>
               <SubCampaingns
+                validate={validate}
                 campaigns={stateCampaigns}
                 dispatch={dispatchCamp}
               />

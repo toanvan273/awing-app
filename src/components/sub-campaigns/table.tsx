@@ -16,12 +16,14 @@ interface Props {
   dispatch: React.Dispatch<ActionCampaign>;
   idCampSelect: number;
   campaigns: SubCampaign[];
+  validate: boolean;
 }
 
 export default function TableCampaign({
   dispatch,
   idCampSelect,
   campaigns,
+  validate,
 }: Props) {
   const selectedCamp = useMemo(() => {
     return campaigns.find((e) => e.idCamp === idCampSelect);
@@ -95,51 +97,60 @@ export default function TableCampaign({
           </TableRow>
         </TableHead>
         <TableBody>
-          {selectedCamp?.ads.map((ad) => (
-            <TableRow
-              key={ad.idAd}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  inputProps={{
-                    "aria-label": "select all desserts",
-                  }}
-                />
-              </TableCell>
-              <TableCell align="left">
-                <TextField
-                  onChange={updateNameAd(ad)}
-                  sx={{ width: "100%" }}
-                  required
-                  id="standard-required"
-                  variant="standard"
-                  value={ad.name}
-                />
-              </TableCell>
-              <TableCell align="left">
-                <TextField
-                onChange={updateQuantityAd(ad)}
-                  sx={{ width: "100%" }}
-                  required
-                  id="standard-required"
-                  variant="standard"
-                  type="number"
-                  value={ad.quantity}
-                />
-              </TableCell>
-              <TableCell align="right">
-                <IconButton
-                  onClick={() => handleRemoveAd(ad)}
-                  aria-label="plus"
-                  size="medium"
-                >
-                  <DeleteIcon fontSize="small" sx={{ color: "grey" }} />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {selectedCamp?.ads.map((ad) => {
+            console.log(ad);
+
+            return (
+              <TableRow
+                key={ad.idAd}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    inputProps={{
+                      "aria-label": "select all desserts",
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextField
+                    error={validate && ad.name === ""}
+                    onChange={updateNameAd(ad)}
+                    sx={{ width: "100%" }}
+                    required
+                    id="standard-required"
+                    variant="standard"
+                    value={ad.name}
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  <TextField
+                    error={
+                      validate &&
+                      (ad.quantity === 0 || Number.isNaN(ad.quantity))
+                    }
+                    onChange={updateQuantityAd(ad)}
+                    sx={{ width: "100%" }}
+                    required
+                    id="standard-required"
+                    variant="standard"
+                    type="number"
+                    value={ad.quantity}
+                  />
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={() => handleRemoveAd(ad)}
+                    aria-label="plus"
+                    size="medium"
+                  >
+                    <DeleteIcon fontSize="small" sx={{ color: "grey" }} />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

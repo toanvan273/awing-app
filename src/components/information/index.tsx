@@ -5,9 +5,10 @@ import { Information } from "../../types/campaign-type";
 interface PropsInfo {
   state: Information;
   dispatch: React.Dispatch<ActionInfo>;
+  validate: boolean;
 }
 
-const InfomationForm = ({ state, dispatch }: PropsInfo) => {
+const InfomationForm = ({ state, dispatch, validate }: PropsInfo) => {
   const handleChange =
     (text: "name" | "desc") => (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ type: text, payload: event.target.value });
@@ -18,6 +19,7 @@ const InfomationForm = ({ state, dispatch }: PropsInfo) => {
       <div>
         <div>
           <TextField
+            error={validate && state.name === ""}
             onChange={handleChange("name")}
             sx={{ width: "100%" }}
             required
@@ -25,6 +27,9 @@ const InfomationForm = ({ state, dispatch }: PropsInfo) => {
             label="Tên chiến dịch"
             variant="standard"
             value={state.name}
+            helperText={
+              validate && state.name === "" ? "Dữ liệu không hợp lệ." : ""
+            }
           />
         </div>
         <div>

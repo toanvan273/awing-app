@@ -9,13 +9,15 @@ import DataTable from "./table";
 interface PropsSubCamp {
   campaigns: SubCampaign[];
   dispatch: React.Dispatch<ActionCampaign>;
+  validate: boolean;
 }
 
-const SubCampaingns = ({ campaigns, dispatch }: PropsSubCamp) => {
+const SubCampaingns = ({ campaigns, dispatch, validate }: PropsSubCamp) => {
   const [idCampSelect, setIdCampSelect] = useState(campaigns[0]?.idCamp || 0);
   return (
     <Container>
       <Campaign
+        validate={validate}
         campaigns={campaigns}
         dispatch={dispatch}
         idCampSelect={idCampSelect}
@@ -24,6 +26,7 @@ const SubCampaingns = ({ campaigns, dispatch }: PropsSubCamp) => {
       <Stack py={1}>
         <h2>DANH SACH QUANG CAO</h2>
         <DataTable
+          validate={validate}
           dispatch={dispatch}
           idCampSelect={idCampSelect}
           campaigns={campaigns}
