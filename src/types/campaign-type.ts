@@ -15,8 +15,3 @@ export interface SubCampaign {
   idCamp: number;
   ads: Ad[];
 }
-
-// export interface Campaign {
-//   information: Information;
-//   subCampaigns: SubCampaign[];
-// }

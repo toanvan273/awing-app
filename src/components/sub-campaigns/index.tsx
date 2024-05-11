@@ -1,46 +1,23 @@
 import { Stack } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useReducer, useState } from "react";
-import { reducerCampaign } from "../../hooks/useReducer";
+import { useState } from "react";
+import { ActionCampaign } from "../../hooks/useReducer";
 import { SubCampaign } from "../../types/campaign-type";
 import Campaign from "./campaign";
 import DataTable from "./table";
 
-function createInitialState(): SubCampaign[] {
-  return [
-    {
-      name: "Chiến dịch con 1",
-      status: true,
-      idCamp: 0,
-      ads: [
-        {
-          name: "Quang cao 1",
-          quantity: 0,
-          idAd: Date.now(),
-        },
-      ],
-    },
-  ];
+interface PropsSubCamp {
+  campaigns: SubCampaign[];
+  dispatch: React.Dispatch<ActionCampaign>;
 }
 
-const SubCampaingns = () => {
-  const [campaigns, dispatch] = useReducer(
-    reducerCampaign,
-    createInitialState()
-  );
-
-  const [campaignSelected, setCampaignSelected] = useState(campaigns[0]);
-  const [idCampSelect, setIdCampSelect] = useState(0);
-
-  console.log("campaignSelected", campaignSelected);
-
+const SubCampaingns = ({ campaigns, dispatch }: PropsSubCamp) => {
+  const [idCampSelect, setIdCampSelect] = useState(campaigns[0]?.idCamp || 0);
   return (
     <Container>
       <Campaign
         campaigns={campaigns}
         dispatch={dispatch}
-        campaignSelected={campaignSelected}
-        setCampaignSelected={setCampaignSelected}
         idCampSelect={idCampSelect}
         setIdCampSelect={setIdCampSelect}
       />
@@ -49,7 +26,7 @@ const SubCampaingns = () => {
         <DataTable
           dispatch={dispatch}
           idCampSelect={idCampSelect}
-          campaignSelected={campaigns.find((c) => c.idCamp === idCampSelect)}
+          campaigns={campaigns}
         />
       </Stack>
     </Container>

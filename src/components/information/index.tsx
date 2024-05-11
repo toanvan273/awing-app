@@ -1,10 +1,13 @@
 import { Box, TextField } from "@mui/material";
-import { useReducer } from "react";
-import { reducerInfo } from "../../hooks/useReducer";
+import { ActionInfo } from "../../hooks/useReducer";
+import { Information } from "../../types/campaign-type";
 
-const InfomationForm = () => {
-  const [state, dispatch] = useReducer(reducerInfo, { name: "", describe: "" });
+interface PropsInfo {
+  state: Information;
+  dispatch: React.Dispatch<ActionInfo>;
+}
 
+const InfomationForm = ({ state, dispatch }: PropsInfo) => {
   const handleChange =
     (text: "name" | "desc") => (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch({ type: text, payload: event.target.value });

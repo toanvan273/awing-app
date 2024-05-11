@@ -2,14 +2,13 @@ import PlusIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Checkbox, Stack, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import { useMemo } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
 import { SubCampaign } from "../../types/campaign-type";
 
 interface Props {
   campaigns: SubCampaign[];
   dispatch: React.Dispatch<ActionCampaign>;
-  campaignSelected: SubCampaign;
-  setCampaignSelected: React.Dispatch<React.SetStateAction<SubCampaign>>;
   idCampSelect: number;
   setIdCampSelect: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -18,27 +17,52 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 export default function Campaign({
   campaigns,
   dispatch,
-  campaignSelected,
-  setCampaignSelected,
   idCampSelect,
   setIdCampSelect,
 }: Props) {
+  const selectedCamp = useMemo(() => {
+    return campaigns.find((e) => e.idCamp === idCampSelect);
+  }, [campaigns, idCampSelect]);
+
   const handleAddCampaign = () => {
     dispatch({ type: "add_campaign" });
   };
 
   const handleSelectCampaign = (camp: SubCampaign) => {
-    setCampaignSelected(camp);
     setIdCampSelect(camp.idCamp);
   };
 
   const handleChangeNameCampaign = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    console.log(event);
+    if (selectedCamp) {
+      dispatch({
+        type: "update_campaign",
+        payload: {
+          idCamp: idCampSelect,
+          name: event.target.value,
+          status: selectedCamp.status,
+        },
+      });
+    }
   };
-  console.log("idCampSelect:", idCampSelect);
-  console.log("campaigns:", campaigns);
+
+  const handleChangeStatusCampaign = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (selectedCamp) {
+      dispatch({
+        type: "update_campaign",
+        payload: {
+          idCamp: idCampSelect,
+          name: selectedCamp.name,
+          status: !selectedCamp.status,
+        },
+      });
+    }
+  };
+  // console.log("idCampSelect:", idCampSelect);
+  // console.log("selectedCamp:", selectedCamp);
   return (
     <div>
       <Stack direction="row" alignItems="start" overflow={"auto"}>
@@ -77,7 +101,10 @@ export default function Campaign({
                     <h3>{camp.name}</h3>
                     <CheckCircleIcon
                       fontSize="small"
-                      sx={{ color: "green", marginLeft: 1 }}
+                      sx={{
+                        color: camp.status ? "green" : "grey",
+                        marginLeft: 1,
+                      }}
                     />
                   </Stack>
                   <Stack textAlign={"center"} fontSize={24} marginTop={0}>
@@ -88,28 +115,30 @@ export default function Campaign({
             })}
         </Stack>
       </Stack>
-      <Stack marginTop={2} direction={"row"} alignItems={"center"}>
-        <Box flex={1}>
-          <TextField
-            onChange={handleChangeNameCampaign}
-            sx={{ width: "100%" }}
-            required
-            id="standard-required"
-            label="Tên chiến dịch con"
-            variant="standard"
-            // defaultValue={campaignSelected.name}
-            value={campaignSelected.name}
-          />
-        </Box>
-        <Box>
-          <Checkbox
-            {...label}
-            size="small"
-            defaultChecked={campaignSelected.status}
-          />
-          <span>Dang hoat dong</span>
-        </Box>
-      </Stack>
+      {selectedCamp && (
+        <Stack marginTop={2} direction={"row"} alignItems={"center"}>
+          <Box flex={1}>
+            <TextField
+              onChange={handleChangeNameCampaign}
+              sx={{ width: "100%" }}
+              required
+              id="standard-required"
+              label="Tên chiến dịch con"
+              variant="standard"
+              value={selectedCamp.name}
+            />
+          </Box>
+          <Box>
+            <Checkbox
+              onChange={handleChangeStatusCampaign}
+              {...label}
+              size="small"
+              checked={selectedCamp.status}
+            />
+            <span>Dang hoat dong</span>
+          </Box>
+        </Stack>
+      )}
     </div>
   );
 }

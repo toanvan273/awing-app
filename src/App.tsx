@@ -5,9 +5,11 @@ import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
+import { useReducer, useState } from "react";
 import InfomationForm from "./components/information";
 import SubCampaingns from "./components/sub-campaigns";
+import { reducerCampaign, reducerInfo } from "./hooks/useReducer";
+import { SubCampaign } from "./types/campaign-type";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -43,19 +45,47 @@ function CustomBox(props: TabPanelProps) {
   );
 }
 
+function createInitialState(): SubCampaign[] {
+  return [
+    {
+      name: "Chiến dịch con 1",
+      status: true,
+      idCamp: 0,
+      ads: [
+        {
+          name: "Quang cao 1",
+          quantity: 0,
+          idAd: Date.now(),
+        },
+      ],
+    },
+  ];
+}
+
 export default function App() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [stateInfo, dispatchInfo] = useReducer(reducerInfo, {
+    name: "",
+    describe: "",
+  });
+  const [stateCampaigns, dispatchCamp] = useReducer(
+    reducerCampaign,
+    createInitialState()
+  );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const handleSubmit = () => {};
   return (
     <div>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Container>
           <Stack py={1} direction="row" justifyContent={"end"}>
-            <Button variant="contained">Submit</Button>
+            <Button onClick={() => handleSubmit()} variant="contained">
+              Submit
+            </Button>
           </Stack>
         </Container>
       </Box>
@@ -73,10 +103,13 @@ export default function App() {
               </Tabs>
             </Box>
             <CustomBox value={value} index={0}>
-              <InfomationForm />
+              <InfomationForm state={stateInfo} dispatch={dispatchInfo} />
             </CustomBox>
             <CustomBox value={value} index={1}>
-              <SubCampaingns />
+              <SubCampaingns
+                campaigns={stateCampaigns}
+                dispatch={dispatchCamp}
+              />
             </CustomBox>
           </Box>
         </Stack>

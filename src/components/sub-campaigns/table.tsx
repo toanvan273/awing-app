@@ -8,24 +8,73 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useMemo } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
-import { SubCampaign } from "../../types/campaign-type";
+import { Ad, SubCampaign } from "../../types/campaign-type";
 
 interface Props {
-  campaignSelected: SubCampaign | undefined;
   dispatch: React.Dispatch<ActionCampaign>;
   idCampSelect: number;
+  campaigns: SubCampaign[];
 }
 
-export default function DenseTable({
-  campaignSelected,
+export default function TableCampaign({
   dispatch,
   idCampSelect,
+  campaigns,
 }: Props) {
-  const handleAddAdvertising = (idCamp: number | undefined) => {
-    if(idCamp)
-    dispatch({ type: "add_advertising", payload: { idCamp } });
+  const selectedCamp = useMemo(() => {
+    return campaigns.find((e) => e.idCamp === idCampSelect);
+  }, [campaigns, idCampSelect]);
+
+  const handleAddAdvertising = (camp: SubCampaign | undefined) => {
+    if (camp) {
+      dispatch({ type: "add_advertising", payload: { idCamp: camp.idCamp } });
+    }
   };
+
+  const handleRemoveAd = (ad: Ad) => {
+    if (selectedCamp) {
+      dispatch({
+        type: "remove_advertising",
+        payload: {
+          idCamp: selectedCamp.idCamp,
+          idAd: ad.idAd,
+        },
+      });
+    }
+  };
+
+  const updateNameAd =
+    (ad: Ad) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (selectedCamp) {
+        dispatch({
+          type: "update_advertising",
+          payload: {
+            idCamp: selectedCamp.idCamp,
+            idAd: ad.idAd,
+            name: event.target.value,
+            quantity: ad.quantity,
+          },
+        });
+      }
+    };
+
+  const updateQuantityAd =
+    (ad: Ad) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (selectedCamp) {
+        dispatch({
+          type: "update_advertising",
+          payload: {
+            idCamp: selectedCamp.idCamp,
+            idAd: ad.idAd,
+            name: ad.name,
+            quantity: parseInt(event.target.value),
+          },
+        });
+      }
+    };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -36,18 +85,17 @@ export default function DenseTable({
             <TableCell align="left">So luong</TableCell>
             <TableCell align="right">
               <Button
-                onClick={() => handleAddAdvertising(campaignSelected?.idCamp)}
+                onClick={() => handleAddAdvertising(selectedCamp)}
                 variant="outlined"
               >
                 <PlusIcon fontSize="medium" sx={{ color: "blue" }} />
                 <span>Them</span>
               </Button>
             </TableCell>
-            {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
-          {campaignSelected?.ads.map((ad) => (
+          {selectedCamp?.ads.map((ad) => (
             <TableRow
               key={ad.idAd}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -62,6 +110,7 @@ export default function DenseTable({
               </TableCell>
               <TableCell align="left">
                 <TextField
+                  onChange={updateNameAd(ad)}
                   sx={{ width: "100%" }}
                   required
                   id="standard-required"
@@ -71,6 +120,7 @@ export default function DenseTable({
               </TableCell>
               <TableCell align="left">
                 <TextField
+                onChange={updateQuantityAd(ad)}
                   sx={{ width: "100%" }}
                   required
                   id="standard-required"
@@ -80,7 +130,11 @@ export default function DenseTable({
                 />
               </TableCell>
               <TableCell align="right">
-                <IconButton aria-label="plus" size="medium">
+                <IconButton
+                  onClick={() => handleRemoveAd(ad)}
+                  aria-label="plus"
+                  size="medium"
+                >
                   <DeleteIcon fontSize="small" sx={{ color: "grey" }} />
                 </IconButton>
               </TableCell>
