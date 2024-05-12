@@ -90,7 +90,6 @@ export default function App() {
   };
 
   const handleSubmit = () => {
-    console.log({ stateInfo, stateCampaigns });
     const validateCamp = validateCampaign(stateCampaigns);
     if (stateInfo.name !== "" && validateCamp) {
       window.alert(`Thêm thành công chiến dịch`);

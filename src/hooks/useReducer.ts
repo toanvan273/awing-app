@@ -15,6 +15,10 @@ export type ActionCampaign =
   | {
       type: "update_campaign";
       payload: { idCamp: number; name: string; status: boolean };
+    }
+  | {
+      type: "remove_list_advertising";
+      payload: { idCamp: number; list: number[] };
     };
 
 export function reducerInfo(state: Information, action: ActionInfo) {
@@ -29,8 +33,6 @@ export function reducerInfo(state: Information, action: ActionInfo) {
 }
 
 export function reducerCampaign(state: SubCampaign[], action: ActionCampaign) {
-  // console.log("ACTION:", action, state);
-
   switch (action.type) {
     case "add_campaign": {
       const totalCampaign = state.length;
@@ -100,6 +102,17 @@ export function reducerCampaign(state: SubCampaign[], action: ActionCampaign) {
                 };
               } else return { ...ad };
             }),
+          };
+        } else return { ...item };
+      });
+      return [...newState];
+    }
+    case "remove_list_advertising": {
+      const newState = state.map((item) => {
+        if (item.idCamp === action.payload.idCamp) {
+          return {
+            ...item,
+            ads: item.ads.filter((e) => !action.payload.list.includes(e.idAd)),
           };
         } else return { ...item };
       });

@@ -8,7 +8,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
 import { Ad, SubCampaign } from "../../types/campaign-type";
 
@@ -25,10 +25,17 @@ export default function TableCampaign({
   campaigns,
   validate,
 }: Props) {
+  const [selectAds, setSelectAds] = useState<number[]>([]);
+
   const selectedCamp = useMemo(() => {
     return campaigns.find((e) => e.idCamp === idCampSelect);
   }, [campaigns, idCampSelect]);
 
+  useEffect(() => {
+    if (idCampSelect) {
+      setSelectAds([]);
+    }
+  }, [idCampSelect]);
   const handleAddAdvertising = (camp: SubCampaign | undefined) => {
     if (camp) {
       dispatch({ type: "add_advertising", payload: { idCamp: camp.idCamp } });
@@ -77,14 +84,52 @@ export default function TableCampaign({
       }
     };
 
+  const updateSelectAd = (ad: Ad) => {
+    if (selectAds.includes(ad.idAd)) {
+      setSelectAds(selectAds.filter((e) => e !== ad.idAd));
+    } else {
+      setSelectAds([...selectAds, ad.idAd]);
+    }
+  };
+
+  const removeListAd = () => {
+    if (selectedCamp && selectAds.length > 0) {
+      dispatch({
+        type: "remove_list_advertising",
+        payload: {
+          idCamp: selectedCamp.idCamp,
+          list: selectAds,
+        },
+      });
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
-            <TableCell align="left">Ten quang cao</TableCell>
-            <TableCell align="left">So luong</TableCell>
+            {selectAds.length > 0 ? (
+              <>
+                <TableCell></TableCell>
+                <TableCell colSpan={2}>
+                  <IconButton
+                    onClick={removeListAd}
+                    aria-label="plus"
+                    size="medium"
+                  >
+                    <DeleteIcon fontSize="small" sx={{ color: "grey" }} />
+                  </IconButton>
+                </TableCell>
+              </>
+            ) : (
+              <>
+                <TableCell></TableCell>
+                <TableCell align="left">Ten quang cao</TableCell>
+                <TableCell align="left">So luong</TableCell>
+              </>
+            )}
+
             <TableCell align="right">
               <Button
                 onClick={() => handleAddAdvertising(selectedCamp)}
@@ -98,8 +143,6 @@ export default function TableCampaign({
         </TableHead>
         <TableBody>
           {selectedCamp?.ads.map((ad) => {
-            console.log(ad);
-
             return (
               <TableRow
                 key={ad.idAd}
@@ -107,6 +150,8 @@ export default function TableCampaign({
               >
                 <TableCell padding="checkbox">
                   <Checkbox
+                    checked={selectAds.includes(ad.idAd)}
+                    onChange={() => updateSelectAd(ad)}
                     color="primary"
                     inputProps={{
                       "aria-label": "select all desserts",

@@ -2,7 +2,7 @@ import PlusIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Checkbox, Stack, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
 import { Ad, SubCampaign } from "../../types/campaign-type";
 
@@ -71,6 +71,19 @@ export default function Campaign({
     return 0;
   };
 
+  const validateCamp = useCallback(
+    (camp: SubCampaign) => {
+      return (
+        camp.name !== "" &&
+        camp.ads.some(
+          (ad) =>
+            ad.name !== "" && ad.quantity !== 0 && Number.isInteger(ad.quantity)
+        )
+      );
+    },
+    [validate]
+  );
+
   return (
     <div>
       <Stack direction="row" alignItems="start" overflow={"auto"}>
@@ -106,7 +119,13 @@ export default function Campaign({
                     alignItems={"center"}
                     justifyContent={"center"}
                   >
-                    <h3>{camp.name}</h3>
+                    <h3
+                      style={{
+                        color: validate && !validateCamp(camp) ? "red" : "",
+                      }}
+                    >
+                      {camp.name}
+                    </h3>
                     <CheckCircleIcon
                       fontSize="small"
                       sx={{
