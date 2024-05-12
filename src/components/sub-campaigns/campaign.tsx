@@ -168,7 +168,7 @@ export default function Campaign({
               size="small"
               checked={selectedCamp.status}
             />
-            <Typography component={"span"}>Dang hoat dong</Typography>
+            <Typography component={"span"}>Đang hoạt động</Typography>
           </Box>
         </Stack>
       )}

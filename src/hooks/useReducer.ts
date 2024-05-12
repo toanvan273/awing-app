@@ -37,12 +37,12 @@ export function reducerCampaign(state: SubCampaign[], action: ActionCampaign) {
     case "add_campaign": {
       const totalCampaign = state.length;
       const newAd: Ad = {
-        name: "Quang cao 1",
+        name: "Quảng cáo 1",
         quantity: 0,
         idAd: Date.now(),
       };
       const newCampaign: SubCampaign = {
-        name: `Chien dich con ${totalCampaign + 1}`,
+        name: `Chiến dịch con ${totalCampaign + 1}`,
         status: true,
         idCamp: totalCampaign,
         ads: [newAd],
@@ -54,7 +54,7 @@ export function reducerCampaign(state: SubCampaign[], action: ActionCampaign) {
       const newState = state.map((item) => {
         if (item.idCamp === action.payload.idCamp) {
           const ad: Ad = {
-            name: `Quang cao ${item.ads.length + 1}`,
+            name: `Quảng cáo ${item.ads.length + 1}`,
             quantity: 0,
             idAd: Date.now(),
           };

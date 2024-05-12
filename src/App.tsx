@@ -52,7 +52,7 @@ function createInitialState(): SubCampaign[] {
       idCamp: 0,
       ads: [
         {
-          name: "Quang cao 1",
+          name: "Quảng cáo 1",
           quantity: 0,
           idAd: Date.now(),
         },

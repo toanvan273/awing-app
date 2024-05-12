@@ -125,8 +125,8 @@ export default function TableCampaign({
             ) : (
               <>
                 <TableCell></TableCell>
-                <TableCell align="left">Ten quang cao</TableCell>
-                <TableCell align="left">So luong</TableCell>
+                <TableCell align="left">Tên quảng cáo</TableCell>
+                <TableCell align="left">Số lượng</TableCell>
               </>
             )}
 
@@ -136,7 +136,7 @@ export default function TableCampaign({
                 variant="outlined"
               >
                 <PlusIcon fontSize="medium" sx={{ color: "blue" }} />
-                <span>Them</span>
+                <span>Thêm</span>
               </Button>
             </TableCell>
           </TableRow>
