@@ -75,7 +75,7 @@ export default function Campaign({
     (camp: SubCampaign) => {
       return (
         camp.name !== "" &&
-        camp.ads.some(
+        camp.ads.every(
           (ad) =>
             ad.name !== "" && ad.quantity !== 0 && Number.isInteger(ad.quantity)
         )

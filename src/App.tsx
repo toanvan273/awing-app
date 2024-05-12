@@ -79,10 +79,10 @@ export default function App() {
   };
 
   const validateCampaign = (camps: SubCampaign[]) => {
-    return camps.some(
+    return camps.every(
       (camp) =>
         camp.name !== "" &&
-        camp.ads.some(
+        camp.ads.every(
           (ad) =>
             ad.name !== "" && ad.quantity !== 0 && Number.isInteger(ad.quantity)
         )
@@ -91,6 +91,8 @@ export default function App() {
 
   const handleSubmit = () => {
     const validateCamp = validateCampaign(stateCampaigns);
+    console.log("validateCamp:", validateCamp);
+
     if (stateInfo.name !== "" && validateCamp) {
       window.alert(`Thêm thành công chiến dịch`);
     } else {
