@@ -4,7 +4,6 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import { useReducer, useState } from "react";
 import InfomationForm from "./components/information";
 import SubCampaingns from "./components/sub-campaigns";
@@ -38,7 +37,7 @@ function CustomBox(props: TabPanelProps) {
             borderRadius: 2,
           }}
         >
-          <Typography>{children}</Typography>
+          <Box>{children}</Box>
         </Box>
       )}
     </div>
@@ -91,8 +90,6 @@ export default function App() {
 
   const handleSubmit = () => {
     const validateCamp = validateCampaign(stateCampaigns);
-    console.log("validateCamp:", validateCamp);
-
     if (stateInfo.name !== "" && validateCamp) {
       window.alert(`Thêm thành công chiến dịch`);
     } else {

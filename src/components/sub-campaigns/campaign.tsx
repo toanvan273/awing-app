@@ -1,6 +1,6 @@
 import PlusIcon from "@mui/icons-material/Add";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Box, Checkbox, Stack, TextField } from "@mui/material";
+import { Box, Checkbox, Stack, TextField, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { useCallback, useMemo } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
@@ -119,13 +119,13 @@ export default function Campaign({
                     alignItems={"center"}
                     justifyContent={"center"}
                   >
-                    <h3
+                    <Typography
                       style={{
                         color: validate && !validateCamp(camp) ? "red" : "",
                       }}
                     >
                       {camp.name}
-                    </h3>
+                    </Typography>
                     <CheckCircleIcon
                       fontSize="small"
                       sx={{
@@ -168,7 +168,7 @@ export default function Campaign({
               size="small"
               checked={selectedCamp.status}
             />
-            <span>Dang hoat dong</span>
+            <Typography component={"span"}>Dang hoat dong</Typography>
           </Box>
         </Stack>
       )}
