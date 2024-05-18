@@ -81,6 +81,7 @@ export default function App() {
     return camps.every(
       (camp) =>
         camp.name !== "" &&
+        camp.ads.length > 0 &&
         camp.ads.every(
           (ad) =>
             ad.name !== "" && ad.quantity !== 0 && Number.isInteger(ad.quantity)
@@ -91,7 +92,18 @@ export default function App() {
   const handleSubmit = () => {
     const validateCamp = validateCampaign(stateCampaigns);
     if (stateInfo.name !== "" && validateCamp) {
-      window.alert(`Thêm thành công chiến dịch`);
+      const data = {
+        campaign: stateInfo,
+        subCampaingns: stateCampaigns.map((camp) => ({
+          name: camp.name,
+          status: camp.status,
+          ads: camp.ads.map((ad) => ({
+            name: ad.name,
+            quantity: ad.quantity,
+          })),
+        })),
+      };
+      window.alert(`Thêm thành công chiến dịch ${JSON.stringify(data)}`);
     } else {
       window.alert(`Vui lòng điền đúng và đầy đủ thông tin`);
       setValidate(true);

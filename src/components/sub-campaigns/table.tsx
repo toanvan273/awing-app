@@ -1,6 +1,6 @@
 import PlusIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, Checkbox, IconButton, TextField } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useMemo, useState } from "react";
 import { ActionCampaign } from "../../hooks/useReducer";
 import { Ad, SubCampaign } from "../../types/campaign-type";
+import RowCampain from "./row";
 
 interface Props {
   dispatch: React.Dispatch<ActionCampaign>;
@@ -144,56 +145,16 @@ export default function TableCampaign({
         <TableBody>
           {selectedCamp?.ads.map((ad) => {
             return (
-              <TableRow
+              <RowCampain
                 key={ad.idAd}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectAds.includes(ad.idAd)}
-                    onChange={() => updateSelectAd(ad)}
-                    color="primary"
-                    inputProps={{
-                      "aria-label": "select all desserts",
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  <TextField
-                    error={validate && ad.name === ""}
-                    onChange={updateNameAd(ad)}
-                    sx={{ width: "100%" }}
-                    required
-                    id="standard-required"
-                    variant="standard"
-                    value={ad.name}
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  <TextField
-                    error={
-                      validate &&
-                      (ad.quantity === 0 || Number.isNaN(ad.quantity))
-                    }
-                    onChange={updateQuantityAd(ad)}
-                    sx={{ width: "100%" }}
-                    required
-                    id="standard-required"
-                    variant="standard"
-                    type="number"
-                    value={ad.quantity}
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={() => handleRemoveAd(ad)}
-                    aria-label="plus"
-                    size="medium"
-                  >
-                    <DeleteIcon fontSize="small" sx={{ color: "grey" }} />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+                ad={ad}
+                selectAds={selectAds}
+                validate={validate}
+                updateSelectAd={updateSelectAd}
+                updateNameAd={updateNameAd}
+                handleRemoveAd={handleRemoveAd}
+                updateQuantityAd={updateQuantityAd}
+              />
             );
           })}
         </TableBody>
